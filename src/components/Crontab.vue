@@ -65,13 +65,11 @@
         <p class="title">时间表达式</p>
         <table>
           <thead>
-            <th v-for="item of tabTitles" width="40" :key="item">{{item}}</th>
+            <th v-for="item of tabTitles" width="40" :key="Object.values(item)[0]">{{Object.values(item)[0]}}</th>
             <th>crontab完整表达式</th>
           </thead>
           <tbody>
-            <td>
-              <span>{{contabValueObj.second}}</span>
-            </td>
+          
             <td>
               <span>{{contabValueObj.min}}</span>
             </td>
@@ -87,16 +85,14 @@
             <td>
               <span>{{contabValueObj.week}}</span>
             </td>
-            <td>
-              <span>{{contabValueObj.year}}</span>
-            </td>
+            
             <td>
               <span>{{contabValueString}}</span>
             </td>
           </tbody>
         </table>
       </div>
-      <CrontabResult :ex="contabValueString"></CrontabResult>
+      <!-- <CrontabResult :ex="contabValueString"></CrontabResult> -->
 
       <div class="pop_btn">
         <el-button size="small" type="primary" @click="submitFill">确定</el-button>
@@ -120,7 +116,14 @@ import CrontabResult from "./Crontab-Result.vue";
 export default {
   data() {
     return {
-      tabTitles: ["秒", "分钟", "小时", "日", "月", "周", "年"],
+      // tabTitles: ["秒", "分钟", "小时", "日", "月", "周", "年"],
+      tabTitles: [ {second: "秒"},
+        {min: "分钟"},
+        {hour: "小时"},
+        {day: "日"},
+        {mouth: "月"},
+        {week: "周"},
+        {year: "年"}],
       tabActive: 0,
       myindex: 0,
       contabValueObj: {
@@ -140,6 +143,17 @@ export default {
     shouldHide(key) {
       if (this.hideComponent && this.hideComponent.includes(key)) return false;
       return true;
+    },
+    shouldHideCronResult() {
+      const that = this
+      const newTableTitles = this.tabTitles
+      newTableTitles.map((item, index)=>{
+        if(that.hideComponent && that.hideComponent.includes(Object.keys(item)[0])){
+          newTableTitles.splice(index,1)
+        } 
+      })
+      console.log("newTableTitles",newTableTitles);
+      this.tabTitles = newTableTitles
     },
     resolveExp() {
       //反解析 表达式
@@ -327,8 +341,7 @@ export default {
     contabValueString: function() {
       let obj = this.contabValueObj;
       let str =
-        obj.second +
-        " " +
+        //  (obj.second == "" ? "" : obj.second + " ") +
         obj.min +
         " " +
         obj.hour +
@@ -337,8 +350,8 @@ export default {
         " " +
         obj.mouth +
         " " +
-        obj.week +
-        (obj.year == "" ? "" : " " + obj.year);
+        obj.week ;
+        // (obj.year == "" ? "" : " " + obj.year);
       return str;
     },
   },
@@ -356,7 +369,11 @@ export default {
     expression: "resolveExp",
     hideComponent(value) {
       // 隐藏部分组件
+      // this.shouldHideCronResult()
     },
+  },
+  created: function(){
+   this.shouldHideCronResult()
   },
   mounted: function() {
     this.resolveExp();

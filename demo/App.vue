@@ -4,11 +4,12 @@
       <el-input v-model="input" placeholder class="inp"></el-input>
       <el-button type="primary" @click="showDialog">生成 cron</el-button>
     </div>
-    <el-dialog title="生成 cron" :visible.sync="showCron">
+    <el-dialog title="" :visible.sync="showCron">
       <vcrontab
         @hide="showCron=false"
         @fill="crontabFill"
         :expression="expression"
+        :hideComponent="hideComponent"
       ></vcrontab>
     </el-dialog>
   </div>
@@ -23,7 +24,7 @@ export default {
       input: "",
       expression: "",
       showCron: false,
-      hideComponent: ["second"],
+      hideComponent: ["second","year"],
     };
   },
   methods: {
