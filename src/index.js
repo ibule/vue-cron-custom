@@ -1,5 +1,5 @@
-import vCrontab from './components/Crontab.vue'
+import vueCronCustom from './components/Crontab.vue'
 
-vCrontab.install = Vue => Vue.component(vCrontab.name, vCrontab);
+vueCronCustom.install = Vue => Vue.component(vueCronCustom.name, vueCronCustom);
 
-export default vCrontab
+export default vueCronCustom
