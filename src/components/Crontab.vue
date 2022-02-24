@@ -105,6 +105,16 @@ import CrontabYear from './Crontab-Year.vue'
 import CrontabResult from './Crontab-Result.vue'
 
 export default {
+  name: 'vueCronCustom',
+ 
+  props: {
+    expression: {
+      type: String,
+      default: '',
+    },
+    hideComponent: { type: Array, default: [] },
+    defaultCorn: { type: String, default: "* * * * * " },
+  },
   data() {
     return {
       // tabTitles: ["秒", "分钟", "小时", "日", "月", "周", "年"],
@@ -128,12 +138,10 @@ export default {
         week: '?',
         year: '',
       },
-      defaultCorn:"0 * * * *",
       showComponent: [],
     }
   },
-  name: 'vueCronCustom',
-  props: ['expression', 'hideComponent'],
+
   methods: {
     shouldHide(key) {
       if (this.hideComponent && this.hideComponent.includes(key)) return false
@@ -161,7 +169,7 @@ export default {
     },
     resolveExp() {
       //反解析 表达式
-      debugger
+
       if (this.expression) {
         let arr = this.expression.split(' ')
         const showComponent = this.showComponent
@@ -171,7 +179,7 @@ export default {
           showComponent.forEach((key, index) => {
             newObj[key] = arr[index]
           })
-        
+
           this.contabValueObj = {
             ...newObj,
           }
@@ -324,22 +332,14 @@ export default {
       this.hidePopup()
     },
     clearCron() {
-      // 还原选择项
      
-      // const contabValueObj = this.contabValueObj
-      // for (const key in contabValueObj) {
-      //   if (Object.hasOwnProperty.call(contabValueObj, key)) {
-         
-      //     if(this.hideComponent && this.hideComponent.includes(key)){
-      //   delete contabValueObj[key]
-      // }
-      //   }
-      // }
-    const showComponent = this.showComponent , arr = this.defaultCorn.split(" "), obj={};
-    showComponent.forEach((key,index)=>{
-      obj[key]= arr[index]
-    })
-    console.log("obj",obj);
+      const showComponent = this.showComponent,
+        arr = this.defaultCorn.split(' '),
+        obj = {}
+      showComponent.forEach((key, index) => {
+        obj[key] = arr[index]
+      })
+      console.log('obj', obj)
       this.contabValueObj = obj
       for (let j in obj) {
         this.changeRadio(j, obj[j])
@@ -349,7 +349,11 @@ export default {
   computed: {
     contabValueString: function () {
       let obj = this.contabValueObj
-console.log("this.contabValueObj",this.contabValueObj, this.showComponent);
+      console.log(
+        'this.contabValueObj',
+        this.contabValueObj,
+        this.showComponent
+      )
 
       let str =
         //  (obj.second == "" ? "" : obj.second + " ") +
