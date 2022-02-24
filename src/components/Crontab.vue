@@ -341,8 +341,8 @@ export default {
     })
     console.log("obj",obj);
       this.contabValueObj = obj
-      for (let j in this.contabValueObj) {
-        this.changeRadio(j, this.contabValueObj[j])
+      for (let j in obj) {
+        this.changeRadio(j, obj[j])
       }
     },
   },
